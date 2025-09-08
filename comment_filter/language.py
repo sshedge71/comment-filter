@@ -19,7 +19,7 @@ c = Lang(
     nested_comments=False)
 
 assembly = Lang(
-    line_comment=';', 
+    line_comment=[';', '#'], 
     comment_bookends=[('/*', '*/')],
     nested_comments=False)
 
@@ -66,7 +66,9 @@ extension_to_lang_map = {
     '.cxx': c,
     '.cpp': c,
     '.h': c,
-    '.S': c,
+    '.S': assembly,
+    '.asm': assembly,
+    '.nasm': assembly,
     '.java': java,
     '.go': go,
     '.hs': haskell,

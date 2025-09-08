@@ -11,7 +11,6 @@ try:
 except:
     from io import StringIO
 
-
 # Same as rfc.parse_line(), but ensure it always returns a string with the
 # same length as the input string.
 def safe_parse_line(lang, state, **kwargs):
@@ -252,6 +251,17 @@ def sql_comments(s, keep_tokens=True):
 
 def assembly_comments(s, keep_tokens=True):
     return list(rfc.parse_file(language.assembly, StringIO(s), keep_tokens=keep_tokens))
+
+def test_assembly_hash_comments():
+    """Test that # works as line comment delimiter for assembly"""
+    assert assembly_comments('# comment\ncode\n') == ['# comment\n', '    \n']
+    assert assembly_comments('# hash comment\n') == ['# hash comment\n']
+
+
+def test_assembly_mixed_comments():
+    """Test that both ; and # work together in assembly"""
+    assert assembly_comments('; semicolon comment\n# hash comment\ncode\n') == ['; semicolon comment\n', '# hash comment\n', '    \n']
+    assert assembly_comments('code ; inline semicolon\ncode # inline hash\n') == ['     ; inline semicolon\n', '     # inline hash\n']
 
 
 def test_parse_file():
